@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9d2b70d422de40bcb0ac2e7c70b2a91d" Name="Diagram1">
+        <EntityTypeShape EntityType="UCTModel.Centre" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.CourseCentre" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.Cours" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.RegisteredCours" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.Session" Width="1.5" PointX="1.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.Subject" Width="1.5" PointX="1.5" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.sysdiagram" Width="1.5" PointX="5.75" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.UserRole" Width="1.5" PointX="3.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.User" Width="1.5" PointX="6" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.UserType" Width="1.5" PointX="3.75" PointY="8.375" IsExpanded="true" />
+        <AssociationConnector Association="UCTModel.FK_CourseCentres_Centres_CentreId" ManuallyRouted="false" />
+        <AssociationConnector Association="UCTModel.FK_Users_Centres_CentreId" ManuallyRouted="false" />
+        <AssociationConnector Association="UCTModel.FK_CourseCentres_Courses_CourseId" ManuallyRouted="false" />
+        <AssociationConnector Association="UCTModel.FK_Courses_Sessions_SessionId" ManuallyRouted="false" />
+        <AssociationConnector Association="UCTModel.FK_Courses_Subjects_SubjectId" ManuallyRouted="false" />
+        <AssociationConnector Association="UCTModel.FK_RegisteredCourses_Courses_CourseId" ManuallyRouted="false" />
+        <AssociationConnector Association="UCTModel.FK_RegisteredCourses_Users_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="UCTModel.FK_Users_UserRole" ManuallyRouted="false" />
+        <AssociationConnector Association="UCTModel.FK_Users_UserTypes_UserTypeId" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
