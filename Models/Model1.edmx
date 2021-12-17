@@ -84,6 +84,8 @@
           <Property Name="Password" Type="varchar(max)" Nullable="false" />
           <Property Name="UserRole_ID" Type="int" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="isAtSchool" Type="int" />
+          <Property Name="SchoolName" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="UserTypes">
           <Key>
@@ -393,6 +395,8 @@
           <NavigationProperty Name="RegisteredCourses" Relationship="Self.FK_RegisteredCourses_Users_UserId" FromRole="Users" ToRole="RegisteredCourses" />
           <NavigationProperty Name="UserRole" Relationship="Self.FK_Users_UserRole" FromRole="Users" ToRole="UserRole" />
           <NavigationProperty Name="UserType" Relationship="Self.FK_Users_UserTypes_UserTypeId" FromRole="Users" ToRole="UserTypes" />
+          <Property Name="isAtSchool" Type="Int32" />
+          <Property Name="SchoolName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UserType">
           <Key>
@@ -696,6 +700,8 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="UCTModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
+                <ScalarProperty Name="isAtSchool" ColumnName="isAtSchool" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />

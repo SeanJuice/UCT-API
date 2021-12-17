@@ -29,6 +29,8 @@ namespace API.Models
         public string Password { get; set; }
         public int UserRole_ID { get; set; }
         public string Email { get; set; }
+        public Nullable<int> isAtSchool { get; set; }
+        public string SchoolName { get; set; }
     
         public virtual Centre Centre { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
