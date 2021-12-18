@@ -96,6 +96,9 @@ namespace API.Controllers
                 usr.Username = user.Username;
                 usr.FirstName = user.FirstName;
                 usr.Surname = user.Surname;
+                usr.isAtSchool = user.isAtSchool;
+                usr.SchoolName = user.SchoolName;
+
                 db.Users.Add(usr);
                 db.SaveChanges();
 
