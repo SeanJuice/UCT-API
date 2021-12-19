@@ -98,6 +98,9 @@ namespace API.Controllers
                 usr.Surname = user.Surname;
                 usr.isAtSchool = user.isAtSchool;
                 usr.SchoolName = user.SchoolName;
+                usr.UserTypeId = user.UserTypeId;
+
+
 
                 db.Users.Add(usr);
                 db.SaveChanges();
@@ -129,6 +132,8 @@ namespace API.Controllers
                     ToReturn.Email = user.Email;
                     ToReturn.FirstName = user.FirstName;
                     ToReturn.Surname = user.Surname;
+                    ToReturn.type = user.UserTypeId;
+
 
                     ToReturn.role = user.UserRole_ID;
 

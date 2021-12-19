@@ -25,11 +25,13 @@ namespace API.Models
         public string CourseDesc { get; set; }
         public int SubjectId { get; set; }
         public Nullable<int> SessionId { get; set; }
+        public Nullable<int> Usertype { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CourseCentre> CourseCentres { get; set; }
         public virtual Session Session { get; set; }
         public virtual Subject Subject { get; set; }
+        public virtual UserRole UserRole { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RegisteredCours> RegisteredCourses { get; set; }
     }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="UCTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="UCTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Centres">
           <Key>
             <PropertyRef Name="CentreId" />
@@ -29,6 +29,7 @@
           <Property Name="CourseDesc" Type="nvarchar(max)" />
           <Property Name="SubjectId" Type="int" Nullable="false" />
           <Property Name="SessionId" Type="int" />
+          <Property Name="Usertype" Type="int" />
         </EntityType>
         <EntityType Name="RegisteredCourses">
           <Key>
@@ -148,6 +149,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Courses_UserRole">
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="0..1" />
+          <End Role="Courses" Type="Self.Courses" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRole">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="Usertype" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RegisteredCourses_Courses_CourseId">
           <End Role="Courses" Type="Self.Courses" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -216,37 +229,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
-        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
-        </Function>
-        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="UCTModelStoreContainer">
           <EntitySet Name="Centres" EntityType="Self.Centres" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CourseCentres" EntityType="Self.CourseCentres" Schema="dbo" store:Type="Tables" />
@@ -274,6 +256,10 @@
             <End Role="Subjects" EntitySet="Subjects" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
+          <AssociationSet Name="FK_Courses_UserRole" Association="Self.FK_Courses_UserRole">
+            <End Role="UserRole" EntitySet="UserRole" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
           <AssociationSet Name="FK_RegisteredCourses_Courses_CourseId" Association="Self.FK_RegisteredCourses_Courses_CourseId">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="RegisteredCourses" EntitySet="RegisteredCourses" />
@@ -295,7 +281,8 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="UCTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -327,9 +314,11 @@
           <Property Name="CourseDesc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SubjectId" Type="Int32" Nullable="false" />
           <Property Name="SessionId" Type="Int32" />
+          <Property Name="Usertype" Type="Int32" />
           <NavigationProperty Name="CourseCentres" Relationship="Self.FK_CourseCentres_Courses_CourseId" FromRole="Courses" ToRole="CourseCentres" />
           <NavigationProperty Name="Session" Relationship="Self.FK_Courses_Sessions_SessionId" FromRole="Courses" ToRole="Sessions" />
           <NavigationProperty Name="Subject" Relationship="Self.FK_Courses_Subjects_SubjectId" FromRole="Courses" ToRole="Subjects" />
+          <NavigationProperty Name="UserRole" Relationship="Self.FK_Courses_UserRole" FromRole="Courses" ToRole="UserRole" />
           <NavigationProperty Name="RegisteredCourses" Relationship="Self.FK_RegisteredCourses_Courses_CourseId" FromRole="Courses" ToRole="RegisteredCourses" />
         </EntityType>
         <EntityType Name="RegisteredCours">
@@ -374,8 +363,9 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Courses" Relationship="Self.FK_Courses_UserRole" FromRole="UserRole" ToRole="Courses" />
           <NavigationProperty Name="Users" Relationship="Self.FK_Users_UserRole" FromRole="UserRole" ToRole="Users" />
         </EntityType>
         <EntityType Name="User">
@@ -391,12 +381,12 @@
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UserRole_ID" Type="Int32" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="isAtSchool" Type="Int32" />
+          <Property Name="SchoolName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Centre" Relationship="Self.FK_Users_Centres_CentreId" FromRole="Users" ToRole="Centres" />
           <NavigationProperty Name="RegisteredCourses" Relationship="Self.FK_RegisteredCourses_Users_UserId" FromRole="Users" ToRole="RegisteredCourses" />
           <NavigationProperty Name="UserRole" Relationship="Self.FK_Users_UserRole" FromRole="Users" ToRole="UserRole" />
           <NavigationProperty Name="UserType" Relationship="Self.FK_Users_UserTypes_UserTypeId" FromRole="Users" ToRole="UserTypes" />
-          <Property Name="isAtSchool" Type="Int32" />
-          <Property Name="SchoolName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UserType">
           <Key>
@@ -471,6 +461,18 @@
             </Principal>
             <Dependent Role="Courses">
               <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Courses_UserRole">
+          <End Role="UserRole" Type="Self.UserRole" Multiplicity="0..1" />
+          <End Role="Courses" Type="Self.Cours" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRole">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Courses">
+              <PropertyRef Name="Usertype" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -559,6 +561,10 @@
             <End Role="Subjects" EntitySet="Subjects" />
             <End Role="Courses" EntitySet="Courses" />
           </AssociationSet>
+          <AssociationSet Name="FK_Courses_UserRole" Association="Self.FK_Courses_UserRole">
+            <End Role="UserRole" EntitySet="UserRoles" />
+            <End Role="Courses" EntitySet="Courses" />
+          </AssociationSet>
           <AssociationSet Name="FK_RegisteredCourses_Courses_CourseId" Association="Self.FK_RegisteredCourses_Courses_CourseId">
             <End Role="Courses" EntitySet="Courses" />
             <End Role="RegisteredCourses" EntitySet="RegisteredCourses" />
@@ -575,48 +581,7 @@
             <End Role="UserTypes" EntitySet="UserTypes" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
-          <FunctionImport Name="sp_alterdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_creatediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="version" Mode="In" Type="Int32" />
-            <Parameter Name="definition" Mode="In" Type="Binary" />
-          </FunctionImport>
-          <FunctionImport Name="sp_dropdiagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(UCTModel.sp_helpdiagramdefinition_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(UCTModel.sp_helpdiagrams_Result)">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_renamediagram">
-            <Parameter Name="diagramname" Mode="In" Type="String" />
-            <Parameter Name="owner_id" Mode="In" Type="Int32" />
-            <Parameter Name="new_diagramname" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="sp_upgraddiagrams" />
         </EntityContainer>
-        <ComplexType Name="sp_helpdiagramdefinition_Result">
-          <Property Type="Int32" Name="version" Nullable="true" />
-          <Property Type="Binary" Name="definition" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="sp_helpdiagrams_Result">
-          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
-          <Property Type="Int32" Name="OwnerID" Nullable="false" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -648,6 +613,7 @@
                 <ScalarProperty Name="CourseDesc" ColumnName="CourseDesc" />
                 <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
                 <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="Usertype" ColumnName="Usertype" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -700,8 +666,6 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="UCTModel.User">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
-                <ScalarProperty Name="isAtSchool" ColumnName="isAtSchool" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
@@ -711,6 +675,8 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="UserRole_ID" ColumnName="UserRole_ID" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="isAtSchool" ColumnName="isAtSchool" />
+                <ScalarProperty Name="SchoolName" ColumnName="SchoolName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -722,30 +688,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="UCTModel.Store.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="UCTModel.Store.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="UCTModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="UCTModel.Store.sp_helpdiagramdefinition">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="UCTModel.sp_helpdiagramdefinition_Result">
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="UCTModel.Store.sp_helpdiagrams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="UCTModel.sp_helpdiagrams_Result">
-                <ScalarProperty Name="Database" ColumnName="Database" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="UCTModel.Store.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="UCTModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
