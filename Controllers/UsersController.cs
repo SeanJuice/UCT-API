@@ -69,8 +69,8 @@ namespace API.Controllers
 
                 courses.ForEach(x =>
                 {
-                    ToReturn.Centre = db.Centres.Where(r => r.CentreId == x.CentreId).FirstOrDefault().CentreName;
-                    ToReturn.Course = db.Courses.Where(zz=>zz.CourseId == x.CourseId).FirstOrDefault().CourseDesc;
+                    ToReturn.Centre = db.Centres.Where(r => r.CentreId == x.CentreId).First().CentreName;
+                    ToReturn.Course = db.Courses.Where(zz=>zz.CourseId == x.CourseId).First().CourseDesc;
                     ToReturn.Marks = x.Marks;
                     ToReturn.Comments = x.Comments;
                     list.Add(ToReturn);
