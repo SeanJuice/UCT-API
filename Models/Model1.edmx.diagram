@@ -4,20 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="882796aeea654313a5c9e47e0d22579a" Name="Diagram1">
-        <EntityTypeShape EntityType="UCTModel.Centre" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="651e221f8749419799d91e9c7dbf6344" Name="Diagram1">
+        <EntityTypeShape EntityType="UCTModel.Centre" Width="1.5" PointX="6" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="UCTModel.CourseCentre" Width="1.5" PointX="8.25" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="UCTModel.Cours" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="UCTModel.RegisteredCours" Width="1.5" PointX="8.25" PointY="2" IsExpanded="true" />
-        <EntityTypeShape EntityType="UCTModel.Session" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="UCTModel.Subject" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="UCTModel.sysdiagram" Width="1.5" PointX="5.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="UCTModel.UserRole" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="UCTModel.User" Width="1.5" PointX="6" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="UCTModel.UserType" Width="1.5" PointX="3.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.Cours" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.RegisteredCours" Width="1.5" PointX="11.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.Session" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.Subject" Width="1.5" PointX="0.75" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.sysdiagram" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.UserRole" Width="1.5" PointX="0.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.User" Width="1.5" PointX="6" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="UCTModel.UserType" Width="1.5" PointX="3.75" PointY="1.625" IsExpanded="true" />
         <AssociationConnector Association="UCTModel.FK_CourseCentres_Centres_CentreId" ManuallyRouted="false" />
-        <AssociationConnector Association="UCTModel.FK_Users_Centres_CentreId" ManuallyRouted="false" />
         <AssociationConnector Association="UCTModel.FK_CourseCentres_Courses_CourseId" ManuallyRouted="false" />
+        <AssociationConnector Association="UCTModel.FK_CourseCentres_Users" ManuallyRouted="false" />
         <AssociationConnector Association="UCTModel.FK_Courses_Sessions_SessionId" ManuallyRouted="false" />
         <AssociationConnector Association="UCTModel.FK_Courses_Subjects_SubjectId" ManuallyRouted="false" />
         <AssociationConnector Association="UCTModel.FK_Courses_UserRole" ManuallyRouted="false" />

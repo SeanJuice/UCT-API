@@ -17,6 +17,7 @@ namespace API.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
+            this.CourseCentres = new HashSet<CourseCentre>();
             this.RegisteredCourses = new HashSet<RegisteredCours>();
         }
     
@@ -24,7 +25,7 @@ namespace API.Models
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public Nullable<int> UserTypeId { get; set; }
-        public Nullable<int> CentreId { get; set; }
+        public Nullable<int> CourseCentreId { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public int UserRole_ID { get; set; }
@@ -32,7 +33,8 @@ namespace API.Models
         public Nullable<int> isAtSchool { get; set; }
         public string SchoolName { get; set; }
     
-        public virtual Centre Centre { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CourseCentre> CourseCentres { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RegisteredCours> RegisteredCourses { get; set; }
         public virtual UserRole UserRole { get; set; }

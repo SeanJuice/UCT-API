@@ -18,7 +18,6 @@ namespace API.Models
         public Centre()
         {
             this.CourseCentres = new HashSet<CourseCentre>();
-            this.Users = new HashSet<User>();
         }
     
         public int CentreId { get; set; }
@@ -27,7 +26,5 @@ namespace API.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CourseCentre> CourseCentres { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
     }
 }

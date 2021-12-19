@@ -17,8 +17,12 @@ namespace API.Models
         public int CourseCentreId { get; set; }
         public int CourseId { get; set; }
         public int CentreId { get; set; }
+        public int userId { get; set; }
+        public Nullable<double> Marks { get; set; }
+        public string Comments { get; set; }
     
         public virtual Centre Centre { get; set; }
         public virtual Cours Cours { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -20,6 +20,9 @@
           <Property Name="CourseCentreId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CourseId" Type="int" Nullable="false" />
           <Property Name="CentreId" Type="int" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="Marks" Type="float" />
+          <Property Name="Comments" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="Courses">
           <Key>
@@ -80,7 +83,7 @@
           <Property Name="FirstName" Type="varchar(max)" Nullable="false" />
           <Property Name="Surname" Type="varchar(max)" Nullable="false" />
           <Property Name="UserTypeId" Type="int" />
-          <Property Name="CentreId" Type="int" />
+          <Property Name="CourseCentreId" Type="int" />
           <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="varchar(max)" Nullable="false" />
           <Property Name="UserRole_ID" Type="int" Nullable="false" />
@@ -120,6 +123,18 @@
             </Principal>
             <Dependent Role="CourseCentres">
               <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseCentres_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="CourseCentres" Type="Self.CourseCentres" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CourseCentres">
+              <PropertyRef Name="userId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -189,20 +204,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Users_Centres_CentreId">
-          <End Role="Centres" Type="Self.Centres" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Users" Type="Self.Users" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Centres">
-              <PropertyRef Name="CentreId" />
-            </Principal>
-            <Dependent Role="Users">
-              <PropertyRef Name="CentreId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Users_UserRole">
           <End Role="UserRole" Type="Self.UserRole" Multiplicity="1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
@@ -248,6 +249,10 @@
             <End Role="Courses" EntitySet="Courses" />
             <End Role="CourseCentres" EntitySet="CourseCentres" />
           </AssociationSet>
+          <AssociationSet Name="FK_CourseCentres_Users" Association="Self.FK_CourseCentres_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="CourseCentres" EntitySet="CourseCentres" />
+          </AssociationSet>
           <AssociationSet Name="FK_Courses_Sessions_SessionId" Association="Self.FK_Courses_Sessions_SessionId">
             <End Role="Sessions" EntitySet="Sessions" />
             <End Role="Courses" EntitySet="Courses" />
@@ -267,10 +272,6 @@
           <AssociationSet Name="FK_RegisteredCourses_Users_UserId" Association="Self.FK_RegisteredCourses_Users_UserId">
             <End Role="Users" EntitySet="Users" />
             <End Role="RegisteredCourses" EntitySet="RegisteredCourses" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Users_Centres_CentreId" Association="Self.FK_Users_Centres_CentreId">
-            <End Role="Centres" EntitySet="Centres" />
-            <End Role="Users" EntitySet="Users" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_UserRole" Association="Self.FK_Users_UserRole">
             <End Role="UserRole" EntitySet="UserRole" />
@@ -294,7 +295,6 @@
           <Property Name="CentreName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CentreLocation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CourseCentres" Relationship="Self.FK_CourseCentres_Centres_CentreId" FromRole="Centres" ToRole="CourseCentres" />
-          <NavigationProperty Name="Users" Relationship="Self.FK_Users_Centres_CentreId" FromRole="Centres" ToRole="Users" />
         </EntityType>
         <EntityType Name="CourseCentre">
           <Key>
@@ -303,8 +303,12 @@
           <Property Name="CourseCentreId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CourseId" Type="Int32" Nullable="false" />
           <Property Name="CentreId" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="Marks" Type="Double" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Centre" Relationship="Self.FK_CourseCentres_Centres_CentreId" FromRole="CourseCentres" ToRole="Centres" />
           <NavigationProperty Name="Cours" Relationship="Self.FK_CourseCentres_Courses_CourseId" FromRole="CourseCentres" ToRole="Courses" />
+          <NavigationProperty Name="User" Relationship="Self.FK_CourseCentres_Users" FromRole="CourseCentres" ToRole="Users" />
         </EntityType>
         <EntityType Name="Cours">
           <Key>
@@ -376,14 +380,14 @@
           <Property Name="FirstName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Surname" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UserTypeId" Type="Int32" />
-          <Property Name="CentreId" Type="Int32" />
+          <Property Name="CourseCentreId" Type="Int32" />
           <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UserRole_ID" Type="Int32" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="isAtSchool" Type="Int32" />
           <Property Name="SchoolName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Centre" Relationship="Self.FK_Users_Centres_CentreId" FromRole="Users" ToRole="Centres" />
+          <NavigationProperty Name="CourseCentres" Relationship="Self.FK_CourseCentres_Users" FromRole="Users" ToRole="CourseCentres" />
           <NavigationProperty Name="RegisteredCourses" Relationship="Self.FK_RegisteredCourses_Users_UserId" FromRole="Users" ToRole="RegisteredCourses" />
           <NavigationProperty Name="UserRole" Relationship="Self.FK_Users_UserRole" FromRole="Users" ToRole="UserRole" />
           <NavigationProperty Name="UserType" Relationship="Self.FK_Users_UserTypes_UserTypeId" FromRole="Users" ToRole="UserTypes" />
@@ -410,20 +414,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Users_Centres_CentreId">
-          <End Role="Centres" Type="Self.Centre" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Users" Type="Self.User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Centres">
-              <PropertyRef Name="CentreId" />
-            </Principal>
-            <Dependent Role="Users">
-              <PropertyRef Name="CentreId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CourseCentres_Courses_CourseId">
           <End Role="Courses" Type="Self.Cours" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -435,6 +425,18 @@
             </Principal>
             <Dependent Role="CourseCentres">
               <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CourseCentres_Users">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="CourseCentres" Type="Self.CourseCentre" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="CourseCentres">
+              <PropertyRef Name="userId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -545,12 +547,12 @@
             <End Role="Centres" EntitySet="Centres" />
             <End Role="CourseCentres" EntitySet="CourseCentres" />
           </AssociationSet>
-          <AssociationSet Name="FK_Users_Centres_CentreId" Association="Self.FK_Users_Centres_CentreId">
-            <End Role="Centres" EntitySet="Centres" />
-            <End Role="Users" EntitySet="Users" />
-          </AssociationSet>
           <AssociationSet Name="FK_CourseCentres_Courses_CourseId" Association="Self.FK_CourseCentres_Courses_CourseId">
             <End Role="Courses" EntitySet="Courses" />
+            <End Role="CourseCentres" EntitySet="CourseCentres" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CourseCentres_Users" Association="Self.FK_CourseCentres_Users">
+            <End Role="Users" EntitySet="Users" />
             <End Role="CourseCentres" EntitySet="CourseCentres" />
           </AssociationSet>
           <AssociationSet Name="FK_Courses_Sessions_SessionId" Association="Self.FK_Courses_Sessions_SessionId">
@@ -603,6 +605,9 @@
                 <ScalarProperty Name="CourseCentreId" ColumnName="CourseCentreId" />
                 <ScalarProperty Name="CourseId" ColumnName="CourseId" />
                 <ScalarProperty Name="CentreId" ColumnName="CentreId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="Marks" ColumnName="Marks" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -670,7 +675,7 @@
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
-                <ScalarProperty Name="CentreId" ColumnName="CentreId" />
+                <ScalarProperty Name="CourseCentreId" ColumnName="CourseCentreId" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="UserRole_ID" ColumnName="UserRole_ID" />
