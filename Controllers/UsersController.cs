@@ -56,6 +56,39 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Route("api/Users/getProfile/{id}")]
+        public object getProfile(int id)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            List<object> list = new List<object>();
+            dynamic ToReturn = new ExpandoObject();
+            try
+            {
+                User user = db.Users.Where(elem => elem.id == id).FirstOrDefault();
+
+                ToReturn.FirstName = user.FirstName;
+                ToReturn.Surname = user.Surname;
+                ToReturn.type = user.UserTypeId;
+                ToReturn.type = user.UserTypeId;
+                ToReturn.isAtSchool = user.isAtSchool;
+                ToReturn.Username = user.Username;
+
+                if (ToReturn.isAtSchool != null)
+                {
+                    ToReturn.SchoolName = user.SchoolName;
+                }
+
+                return ToReturn;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+
+        [HttpGet]
         [Route("api/Users/myCourses/{id}")]
         public List<object> myCourses(int id)
         {
@@ -65,17 +98,21 @@ namespace API.Controllers
             dynamic ToReturn = new ExpandoObject();
             try
             {
-                List<CourseCentre> courses = db.CourseCentres.Where(r => r.userId == id).ToList();
+                //List<CourseCentre> coursescentre = db.CourseCentres.Where(r => r.userId == id).ToList();
+                List<Cours> courses = db.Courses.ToList();
 
-                courses.ForEach(x =>
+
+                var coursescentre = db.CourseCentres.Include(c => c.Cours).Include(c =>c.Centre).Where(r => r.userId==id).ToList();
+
+                foreach (CourseCentre x in coursescentre)
                 {
-                    ToReturn.Centre = db.Centres.Where(r => r.CentreId == x.CentreId).First().CentreName;
-                    ToReturn.Course = db.Courses.Where(zz=>zz.CourseId == x.CourseId).First().CourseDesc;
+                    ToReturn.Centre =x.Centre.CentreName;
+                    ToReturn.Course = x.Cours.CourseDesc;
                     ToReturn.Marks = x.Marks;
                     ToReturn.Comments = x.Comments;
                     list.Add(ToReturn);
-                   
-                });
+
+                };
 
                 return list;
             }
@@ -106,7 +143,7 @@ namespace API.Controllers
         }
 
         [Route("api/Users/RegisterCourse")]
-        [HttpPost] //Eventually we need to check if the user is active or registered before logging in 
+        [HttpPost] //Eventually we need to check if the user is active or registered before logging in
         public object SubmitReview([FromBody] CourseCentre course)
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -145,10 +182,13 @@ namespace API.Controllers
             }
             catch (Exception rr)
             {
-       
+
                 return rr.Data;
             }
         }
+
+
+
 
 
 

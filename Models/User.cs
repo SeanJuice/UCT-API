@@ -18,6 +18,7 @@ namespace API.Models
         public User()
         {
             this.CourseCentres = new HashSet<CourseCentre>();
+            this.Documents = new HashSet<Document>();
             this.RegisteredCourses = new HashSet<RegisteredCours>();
         }
     
@@ -35,6 +36,8 @@ namespace API.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CourseCentre> CourseCentres { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Document> Documents { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RegisteredCours> RegisteredCourses { get; set; }
         public virtual UserRole UserRole { get; set; }

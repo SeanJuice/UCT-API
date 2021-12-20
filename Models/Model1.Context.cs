@@ -28,6 +28,7 @@ namespace API.Models
         public virtual DbSet<Centre> Centres { get; set; }
         public virtual DbSet<CourseCentre> CourseCentres { get; set; }
         public virtual DbSet<Cours> Courses { get; set; }
+        public virtual DbSet<Document> Documents { get; set; }
         public virtual DbSet<RegisteredCours> RegisteredCourses { get; set; }
         public virtual DbSet<Session> Sessions { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }

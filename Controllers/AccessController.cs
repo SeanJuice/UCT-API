@@ -20,6 +20,11 @@ using System.Data.SqlClient;
 using System.Runtime.Serialization;
 using System.Net.Mail;
 using System.Data.Entity.Infrastructure;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+using HttpPostAttribute = System.Web.Mvc.HttpPostAttribute;
+using RouteAttribute = System.Web.Http.RouteAttribute;
+using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 
 namespace API.Controllers
 {
@@ -168,66 +173,73 @@ namespace API.Controllers
                 return null;
             }
         }
-        //[Route("api/Access/SubmitReview/{id}")]
-        //[HttpPost] //Eventually we need to check if the user is active or registered before logging in 
-        //public object SubmitReview([FromBody] Review review, int id)
-        //{
-        //    db.Configuration.ProxyCreationEnabled = false;
 
-        //    try
-        //    {
-        //        Booking booking = db.Bookings.Where(zz => zz.UserId == id).FirstOrDefault();
-        //        booking.isReviewed = 1;
-        //        db.Reviews.Add(review);
-        //        PutBooking(id, booking);
+        [HttpPost]
+        [Route("api/Access/DocumentUpload/")]
+        public async Task<ActionResult> DocumentUpload(DocumentListVM DocumentInputModel)
+        {
+            try
+            {
                
-        //        return review;
+                List<Document> DocList = GetDocList(DocumentInputModel.DocumentList);
+                 db.Documents.AddRange(DocList);
+                int NoOfRowsInserted = await db.SaveChangesAsync();
+                if (NoOfRowsInserted > 0)
+                {
+                    //return (new { message = "Documents Saved Successfully", Data = DocList });
+                    return null;
+                }
+                else
+                {
+                   /// return Ok(new { message = "Something went wrong. Please try again." });
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                //return ex.Message;
+                return null;
+            }
+        }
 
-        //    }
-        //    catch(Exception rr)
-        //    {
-        //        return rr.Data;
-        //    }
-        //}
+        private List<Document> GetDocList(DocumentVM[] lstDocVM)
+        {
+            //converting document array received to database document table list
+            List<Document> DBDocList = new List<Document>();
+            foreach (var Doc in lstDocVM)
+            {
+                // dividing file content from file type
+                Doc.DocumentContent = Doc.DocumentContent.Substring(Doc.DocumentContent.IndexOf(",") + 1);
+                DBDocList.Add(new Document
+                {
+                    DocumentName = Doc.DocumentName,
+                    DocumentContent = Convert.FromBase64String(Doc.DocumentContent),
+                    ContentType = Doc.ContentType,
+                    UserId = Doc.UserId
 
+                });
+            }
+            return DBDocList;
+        }
+        [HttpGet]
+        [Route("DownloadDocument/{DocumentId}")]
+        public Document DownloadDoument(long DocumentId)
+        {
+            try
+            {
+              
+                Document doc = db.Documents.FirstOrDefault(x => x.DocumentId == DocumentId);
 
-        //private IHttpActionResult PutBooking(int id, Booking booking)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+                return doc;
+            }
+            catch (Exception ex)
+            {
+                return null;
 
-        //    if (id != booking.BookingID)
-        //    {
-        //        return BadRequest();
-        //    }
+            }
 
-        //    db.Entry(booking).State = EntityState.Modified;
+        }
 
-        //    try
-        //    {
-        //        db.SaveChanges();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!BookingExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return StatusCode(HttpStatusCode.NoContent);
-        //}
-
-        //private bool BookingExists(int id)
-        //{
-        //    return db.Bookings.Count(e => e.BookingID == id) > 0;
-        //}
     }
 
             
