@@ -13,6 +13,7 @@ using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using System.Web.Mvc;
 using API.Models;
+using HttpDeleteAttribute = System.Web.Http.HttpDeleteAttribute;
 using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
 using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
 using RouteAttribute = System.Web.Http.RouteAttribute;
@@ -194,6 +195,31 @@ namespace API.Controllers
 
 
         //    Centre CRUD
+
+        [HttpPost]
+        [Route("api/Users/Create")]
+        public  IHttpActionResult Create([Bind(Include = "CentreId,CentreName,CentreLocation")] Centre centre)
+        {
+          
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.Centres.Add(centre);
+                    db.SaveChanges();
+                    return Ok(centre);
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Ok(centre);
+
+           
+        }
+
         [HttpPost]
         [Route("api/Users/EditCentre/{id}")]
         public IHttpActionResult Edit([Bind(Include = "CentreId,CentreName,CentreLocation")] Centre centre, int id)
@@ -222,6 +248,17 @@ namespace API.Controllers
             }
             return Ok(centre);
 
+        }
+
+        [HttpDelete]
+        [Route("api/Users/DeleteCentre/{id}")]
+
+        public IHttpActionResult  DeleteConfirmed(int id)
+        {
+            Centre centre =  db.Centres.Where(c=>c.CentreId == id).FirstOrDefault();
+            db.Centres.Remove(centre);
+             db.SaveChanges();
+            return Ok();
         }
 
 
