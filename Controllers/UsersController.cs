@@ -7,10 +7,15 @@ using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using System.Web.Mvc;
 using API.Models;
+using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
+using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
+using RouteAttribute = System.Web.Http.RouteAttribute;
 
 namespace API.Controllers
 {
@@ -188,7 +193,36 @@ namespace API.Controllers
         }
 
 
+        //    Centre CRUD
+        [HttpPost]
+        [Route("api/Users/EditCentre/{id}")]
+        public IHttpActionResult Edit([Bind(Include = "CentreId,CentreName,CentreLocation")] Centre centre, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            try
+            {
+                Centre _centre = new Centre();
+                _centre = db.Centres.Where(c => c.CentreId == id).FirstOrDefault();
+                if (_centre != null)
+                {
+                    _centre.CentreName = centre.CentreName;
+                    _centre.CentreLocation = centre.CentreLocation;
+
+                }
+                int i = db.SaveChanges();
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Ok(centre);
+
+        }
 
 
 
