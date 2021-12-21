@@ -42,6 +42,26 @@ namespace API.Controllers
             }
 
         }
+
+        [HttpGet]
+        [Route("api/Users/getLearners")]
+        public List<User> getLearners()
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            List<object> list = new List<object>();
+            try
+            {
+                List<User> users = db.Users.Where(z =>z.UserRole_ID == 2).OrderBy(x=>x.UserTypeId).ToList();
+                return users;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+
         [HttpGet]
         [Route("api/Users/getAllCourses")]
         public List<Cours> getAllCourses()
@@ -142,7 +162,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("api/Users/myCourses/{id}")]
-        public List<object> myCourses(int id)
+        public dynamic myCourses(int id)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
@@ -154,19 +174,15 @@ namespace API.Controllers
                 List<Cours> courses = db.Courses.ToList();
 
 
-                var coursescentre = db.CourseCentres.Include(c => c.Cours).Include(c =>c.Centre).Where(r => r.userId==id).ToList();
+                var coursescentre = db.CourseCentres.Include(c => c.Cours).Include(c =>c.Centre).Where(r => r.userId == id).Select(re => new {
+                    Centre = re.Centre.CentreName,
+                    Course = re.Cours.CourseDesc,
+                    Marks = re.Marks,
+                    Comments = re.Comments,
+            }).ToList();
 
-                foreach (CourseCentre x in coursescentre)
-                {
-                    ToReturn.Centre =x.Centre.CentreName;
-                    ToReturn.Course = x.Cours.CourseDesc;
-                    ToReturn.Marks = x.Marks;
-                    ToReturn.Comments = x.Comments;
-                    list.Add(ToReturn);
 
-                };
-
-                return list;
+                return coursescentre;
             }
             catch (Exception)
             {

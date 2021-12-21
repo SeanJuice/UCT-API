@@ -169,6 +169,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccessController.cs" />
+    <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\SubjectsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -298,6 +299,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\NewFolder1\" />
     <Folder Include="Views\Centres\" />
+    <Folder Include="Views\Courses\" />
     <Folder Include="Views\Course\" />
     <Folder Include="Views\Cours\" />
     <Folder Include="Views\Subjects\" />
