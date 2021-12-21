@@ -23,6 +23,7 @@
           <Property Name="userId" Type="int" Nullable="false" />
           <Property Name="Marks" Type="float" />
           <Property Name="Comments" Type="varchar(max)" />
+          <Property Name="deregistred" Type="bit" />
         </EntityType>
         <EntityType Name="Courses">
           <Key>
@@ -335,6 +336,7 @@
           <NavigationProperty Name="Centre" Relationship="Self.FK_CourseCentres_Centres_CentreId" FromRole="CourseCentres" ToRole="Centres" />
           <NavigationProperty Name="Cours" Relationship="Self.FK_CourseCentres_Courses_CourseId" FromRole="CourseCentres" ToRole="Courses" />
           <NavigationProperty Name="User" Relationship="Self.FK_CourseCentres_Users" FromRole="CourseCentres" ToRole="Users" />
+          <Property Name="deregistred" Type="Boolean" />
         </EntityType>
         <EntityType Name="Cours">
           <Key>
@@ -657,6 +659,7 @@
           <EntitySetMapping Name="CourseCentres">
             <EntityTypeMapping TypeName="UCTModel.CourseCentre">
               <MappingFragment StoreEntitySet="CourseCentres">
+                <ScalarProperty Name="deregistred" ColumnName="deregistred" />
                 <ScalarProperty Name="CourseCentreId" ColumnName="CourseCentreId" />
                 <ScalarProperty Name="CourseId" ColumnName="CourseId" />
                 <ScalarProperty Name="CentreId" ColumnName="CentreId" />

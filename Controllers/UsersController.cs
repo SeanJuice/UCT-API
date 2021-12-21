@@ -160,6 +160,68 @@ namespace API.Controllers
 
         }
 
+        [HttpPost]
+        [Route("api/Users/UpdateUser/{id}")]
+        public IHttpActionResult UpdateUser([Bind(Include = "id,FirstName,Surname")] User user, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                User _user = new User();
+                _user = db.Users.Where(c => c.id == id).FirstOrDefault();
+                if (_user != null)
+                {
+                    _user.FirstName = user.FirstName;
+                    _user.Surname = user.Surname;
+                    _user.UserTypeId = user.UserTypeId;
+
+                }
+                int i = db.SaveChanges();
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Ok(user);
+
+        }
+
+        [HttpPost]
+        [Route("api/Users/Deregister")]
+        public IHttpActionResult Deregister([Bind(Include = "CourseCentreId,Comments")] CourseCentre centre)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                CourseCentre _center = new CourseCentre();
+                _center = db.CourseCentres.Where(c => c.CourseCentreId == centre.CourseCentreId).FirstOrDefault();
+                if (_center != null)
+                {
+                    _center.Comments = centre.Comments;
+                    _center.deregistred =true;
+
+                }
+                int i = db.SaveChanges();
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return Ok(centre);
+
+        }
+
+
         [HttpGet]
         [Route("api/Users/myCourses/{id}")]
         public dynamic myCourses(int id)
@@ -174,11 +236,13 @@ namespace API.Controllers
                 List<Cours> courses = db.Courses.ToList();
 
 
-                var coursescentre = db.CourseCentres.Include(c => c.Cours).Include(c =>c.Centre).Where(r => r.userId == id).Select(re => new {
+                var coursescentre = db.CourseCentres.Include(c => c.Cours).Include(c =>c.Centre).Where(r => r.userId == id && r.deregistred ==null).Select(re => new {
+                    CourseCentreId = re.CourseCentreId,
                     Centre = re.Centre.CentreName,
                     Course = re.Cours.CourseDesc,
                     Marks = re.Marks,
                     Comments = re.Comments,
+
             }).ToList();
 
 

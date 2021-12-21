@@ -20,6 +20,7 @@ namespace API.Models
         public int userId { get; set; }
         public Nullable<double> Marks { get; set; }
         public string Comments { get; set; }
+        public Nullable<bool> deregistred { get; set; }
     
         public virtual Centre Centre { get; set; }
         public virtual Cours Cours { get; set; }
