@@ -43,6 +43,24 @@ namespace API.Controllers
 
         }
         [HttpGet]
+        [Route("api/Users/getAllCourses")]
+        public List<Cours> getAllCourses()
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            List<object> list = new List<object>();
+            try
+            {
+                List<Cours> types = db.Courses.ToList();
+                return types;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+        [HttpGet]
         [Route("api/Users/getCourses/{id}")]
         public List<Cours> getCourses(int id)
         {
@@ -261,8 +279,47 @@ namespace API.Controllers
             return Ok();
         }
 
+       // learners from specific centre
+        [HttpGet]
+        [Route("api/Users/getSpecificCentreStudents/{id}")]
+        public List<object> getSpecificCentreStudents(int id)
+        {
 
+            db.Configuration.ProxyCreationEnabled = false;
+            List<object> list = new List<object>();
+            try
+            {
+                var users = db.CourseCentres.Include(b => b.User).Where(rs => rs.CourseId == id).Select(r => new { 
+                Name =  r.User.FirstName,
+                Surname = r.User.Surname
+                }).ToList();
+                return (List<object>)users;
+            }
+            catch (Exception c)
+            {
+                return null;
+            }
 
+        }
+
+        [HttpGet]
+        [Route("api/Users/getSpecificCourseStudents/{id}")]
+        public List<User> getSpecificCourseStudents(int id)
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            List<object> list = new List<object>();
+            try
+            {
+                List<User> users = db.Users.Include(c => c.CourseCentres.Where(ex => ex.CourseId == id)).ToList();
+                return users;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
 
     }
 }

@@ -19,7 +19,7 @@ using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
 using RouteAttribute = System.Web.Http.RouteAttribute;
 namespace API.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [EnableCors(origins: "http://localhost:4200", headers: "*", methods: "*")]
     public class SubjectsController : ApiController
     {
         private UCTEntities db = new UCTEntities();
@@ -27,8 +27,19 @@ namespace API.Controllers
         [HttpGet]
         [Route("api/Subjects/getSubjects")]
         public List<Subject> getSubjects()
+        
         {
-            return db.Subjects.ToList();
+            db.Configuration.ProxyCreationEnabled = false;
+            List<object> list = new List<object>();
+            try
+            {
+                List<Subject> subjects = db.Subjects.ToList();
+                return subjects;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
 
@@ -92,7 +103,7 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        [Route("api/Subjects/DeleteCentre/{id}")]
+        [Route("api/Subjects/DeleteSubject/{id}")]
 
         public IHttpActionResult DeleteConfirmed(int id)
         {
