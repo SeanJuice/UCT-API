@@ -51,8 +51,8 @@ namespace API.Controllers
             List<object> list = new List<object>();
             try
             {
-                List<Cours> types = db.Courses.ToList();
-                return types;
+                List<Cours> courses = db.Courses.ToList();
+                return courses;
             }
             catch (Exception)
             {
@@ -60,6 +60,34 @@ namespace API.Controllers
             }
 
         }
+
+        [HttpGet]
+        [Route("api/Users/getAllCoursesCrud")]
+        [EnableCors(origins: "*", headers: "*", methods: "*")]
+        public dynamic getAllCoursesCrud()
+        {
+
+            db.Configuration.ProxyCreationEnabled = false;
+            List<object> list = new List<object>();
+            try
+            {
+                //dynamic courses = db.Courses.Include(c => c.Subject).ToList();
+                dynamic courses = db.Courses.Include(b => b.Subject).Select(r => new {
+                    CourseDesc = r.CourseDesc,
+                    CourseId = r.CourseId,
+                    Subject = r.Subject.SubjectDesc,
+                    SubjectId = r.SubjectId
+                }).ToList();
+
+                return courses;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+
         [HttpGet]
         [Route("api/Users/getCourses/{id}")]
         public List<Cours> getCourses(int id)
@@ -282,18 +310,17 @@ namespace API.Controllers
        // learners from specific centre
         [HttpGet]
         [Route("api/Users/getSpecificCentreStudents/{id}")]
-        public List<object> getSpecificCentreStudents(int id)
+        public dynamic getSpecificCentreStudents(int id)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
             List<object> list = new List<object>();
             try
             {
-                var users = db.CourseCentres.Include(b => b.User).Where(rs => rs.CourseId == id).Select(r => new { 
-                Name =  r.User.FirstName,
-                Surname = r.User.Surname
+                dynamic  users = db.CourseCentres.Include(b => b.User).Where(rs => rs.CentreId == id).Select(r => new { 
+                User =  r.User
                 }).ToList();
-                return (List<object>)users;
+                return users;
             }
             catch (Exception c)
             {
@@ -304,14 +331,16 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("api/Users/getSpecificCourseStudents/{id}")]
-        public List<User> getSpecificCourseStudents(int id)
+        public dynamic getSpecificCourseStudents(int id)
         {
 
             db.Configuration.ProxyCreationEnabled = false;
             List<object> list = new List<object>();
             try
             {
-                List<User> users = db.Users.Include(c => c.CourseCentres.Where(ex => ex.CourseId == id)).ToList();
+                dynamic users = db.CourseCentres.Include(b => b.User).Where(rs => rs.CourseId == id).Select(r => new {
+                    User = r.User
+                }).ToList();
                 return users;
             }
             catch (Exception)
